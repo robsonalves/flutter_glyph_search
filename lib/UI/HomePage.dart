@@ -115,21 +115,42 @@ class _HomePageState extends State<HomePage> {
         ),
         itemCount: _getCount(snapshot.data["data"]),
         itemBuilder: (context, index) {
-          return GestureDetector(
-            child: Image.network(
-                snapshot.data["data"][index]["images"]["fixed_height"]["url"],
-                height: 300.0,
-                fit: BoxFit.cover
-            ),
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          GifPage(snapshot.data["data"][index])
-                  )
-              );
-            },
-          );
+          if (_search == null || index < snapshot.data["data"].length) {
+            return GestureDetector(
+              child: Image.network(
+                  snapshot.data["data"][index]["images"]["fixed_height"]["url"],
+                  height: 300.0,
+                  fit: BoxFit.cover
+              ),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            GifPage(snapshot.data["data"][index])
+                    )
+                );
+              },
+            );
+          } else {
+            return Container(
+              child: GestureDetector(
+                child: Column(
+                  children: <Widget>[
+                    Icon(Icons.add, color: Colors.white, size: 70.0),
+                    Text("Carregando Mais ...",
+                      style: TextStyle(color: Colors.white, fontSize: 22.0)
+                    )
+                  ],
+                ),
+                onTap: (){
+                  setState(() {
+                    _offset += 19;
+                  });
+                },
+              )
+            );
+          }
+
         }
     );
   }
